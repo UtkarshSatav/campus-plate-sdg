@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   capture:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
@@ -31,3 +31,10 @@ jobs:
           name: campus-plate-screenshots
           path: screenshots/*.png
           if-no-files-found: error
+      - name: Verify the public site without signing in
+        run: |
+          site="https://utkarshsatav.github.io/campus-plate-sdg/dist/"
+          curl --retry 5 --retry-all-errors --retry-delay 3 --fail "$site" --output /dev/null
+          curl --fail "${site}campus-plate-source.zip" --output /tmp/campus-plate-public-source.zip
+          unzip -t /tmp/campus-plate-public-source.zip
+          node scripts/capture-demo.mjs "$site" /tmp/campus-plate-public-check
