@@ -1,0 +1,33 @@
+name: Verify demo and capture screenshots
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install browser tooling
+        run: |
+          npm install --no-save --no-package-lock playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Verify the working demo
+        run: |
+          python3 -m http.server 8000 --bind 127.0.0.1 --directory dist > /tmp/campus-plate-http.log 2>&1 &
+          trap 'kill "$!"' EXIT
+          curl --retry 5 --retry-all-errors --retry-delay 1 --fail http://127.0.0.1:8000/ --output /dev/null
+          node scripts/capture-demo.mjs
+      - name: Upload submission screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: campus-plate-screenshots
+          path: screenshots/*.png
+          if-no-files-found: error

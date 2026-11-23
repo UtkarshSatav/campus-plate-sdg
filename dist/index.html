@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Reserve and collect free surplus portions from catered campus events.">
+    <title>Campus Plate</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="app.mjs"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <a class="wordmark" href="#student" aria-label="Campus Plate home">
+          <span class="brand-mark" aria-hidden="true"></span>
+          Campus Plate
+        </a>
+        <nav aria-label="Demo views">
+          <a href="#student" id="student-link">Student</a>
+          <a href="#organizer" id="organizer-link">Organizer</a>
+        </nav>
+        <span class="demo-label">Demo campus</span>
+      </div>
+    </header>
+
+    <main id="main" class="shell" tabindex="-1"></main>
+
+    <footer class="shell footer">
+      <p>Demo data stays in this browser.</p>
+      <div class="footer-links">
+        <a href="https://sdgs.un.org/goals/goal12">UN SDG 12.3</a>
+        <a href="campus-plate-source.zip" download>Source code</a>
+        <button type="button" data-action="reset">Reset demo</button>
+      </div>
+    </footer>
+    <p id="notice" class="notice" role="status" aria-live="polite" aria-atomic="true"></p>
+
+    <template id="student-template">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-content">
+          <p class="eyebrow">Student pickup board</p>
+          <h1 id="page-title">Free meals<br>on campus.</h1>
+          <p>Reserve a surplus portion and show your code at pickup.</p>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="place-setting"><div class="plate"><i></i><i></i><i></i></div></div>
+        </div>
+      </section>
+      <section id="passes" class="passes" aria-label="My pickup passes" hidden></section>
+      <section class="board" aria-labelledby="board-title">
+        <header class="section-head">
+          <h2 id="board-title">Open for pickup</h2>
+          <p id="listing-count"></p>
+        </header>
+        <div id="listings" class="cards"></div>
+      </section>
+    </template>
+
+    <template id="organizer-template">
+      <section class="workspace-heading" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Organizer workspace</p>
+          <h1 id="page-title">Manage pickups</h1>
+          <p>Post surplus portions and confirm when students collect them.</p>
+        </div>
+      </section>
+      <section class="metrics" aria-label="Pickup totals">
+        <div class="metric"><span>Portions posted</span><strong id="posted-total">0</strong></div>
+        <div class="metric"><span>Currently reserved</span><strong id="reserved-total">0</strong></div>
+        <div class="metric metric-impact"><span>Portions collected</span><strong id="collected-total">0</strong></div>
+      </section>
+      <div class="workspace-grid">
+        <section class="panel" aria-labelledby="posting-title">
+          <h2 id="posting-title">Post a pickup</h2>
+          <form id="post-form">
+            <label>Event name<input name="title" maxlength="70" required placeholder="Green Campus Workshop"></label>
+            <label>Meal and dietary details<input name="meal" maxlength="100" required placeholder="Vegetable rice bowls · Vegetarian"></label>
+            <label>Pickup location<input name="place" maxlength="70" required placeholder="Student Union · Room 204"></label>
+            <div class="form-row">
+              <label>Portions<input name="quantity" type="number" min="1" max="500" required placeholder="20"></label>
+              <label>Closes in<select name="duration">
+                <option value="15">15 minutes</option>
+                <option value="30" selected>30 minutes</option>
+                <option value="45">45 minutes</option>
+                <option value="60">60 minutes</option>
+              </select></label>
+            </div>
+            <button type="submit" class="primary">Publish pickup</button>
+          </form>
+        </section>
+        <div class="stack">
+          <section class="panel" aria-labelledby="verify-title">
+            <h2 id="verify-title">Confirm a collection</h2>
+            <form id="verify-form" class="verify-form">
+              <label>Student pickup code<input name="code" maxlength="6" required autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Enter 6 characters"></label>
+              <button type="submit" class="primary">Confirm pickup</button>
+            </form>
+            <div id="verification-result" class="verification-result" role="status" hidden></div>
+          </section>
+          <section class="panel" aria-labelledby="posted-title">
+            <h2 id="posted-title">Posted pickups</h2>
+            <div id="posted-list"></div>
+          </section>
+        </div>
+      </div>
+    </template>
+  </body>
+</html>
