@@ -7,7 +7,7 @@ const output = process.argv[3] ?? "screenshots";
 const listingTitle = "Green Campus Workshop";
 await mkdir(output, { recursive: true });
 
-const browser = await chromium.launch();
+const browser = await chromium.launch({ channel: process.env.CAMPUS_PLATE_BROWSER_CHANNEL });
 try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 940 } });
   const pageErrors = [];
